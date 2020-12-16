@@ -6,15 +6,21 @@ const data = {
   origins: [
     {
       title: '中华人民共和国应急管理部-征求意见',
-      link: 'http://www.mem.gov.cn/hd/zqyj/',
-      site: 'http://www.mem.gov.cn/',
+      url: 'http://www.mem.gov.cn/hd/zqyj/',
+      host: 'http://www.mem.gov.cn/',
       selector: '.tonglan_list li',
     },
     {
       title: '中华人民共和国生态环境部-部文件',
-      link: 'http://www.mee.gov.cn/zcwj/bwj/',
-      site: 'http://www.mee.gov.cn/',
+      url: 'http://www.mee.gov.cn/zcwj/bwj/',
+      host: 'http://www.mee.gov.cn/',
       selector: '.bd li'
+    },
+    {
+      title: '中国政府网-最新政策', 
+      url: 'http://www.gov.cn/zhengce/zuixin.htm',
+      host: 'http://www.gov.cn/',
+      selector: '.news_box li'
     }
   ],
   resources: []
@@ -82,7 +88,7 @@ const template = function(data) {
 
 data.origins.forEach(origin => {
 // Async
-axios.get(`https://cors-anywhere.herokuapp.com/${origin.link}`)
+axios.get(`https://cors-anywhere.herokuapp.com/${origin.url}`)
   .then(response => {
     const html = response.data;
     const $ = cheerio.load(html);
@@ -95,7 +101,7 @@ axios.get(`https://cors-anywhere.herokuapp.com/${origin.link}`)
           node: $(elem).children('a'),
           property: 'href',
           regx: /..\/..\//g,
-          str: `${origin.site}`
+          str: `${origin.host}`
         }),
         origin: `${origin.title}`
       })
