@@ -75,12 +75,11 @@ const getText = function(node, elem) {
   return node.children(elem).text();
 }
 
-const getAttr = function({
+const getHref = function({
   node, 
-  origin, 
-  property = 'href'
+  origin
 }) {
-  const href = node.find('a').attr(property);
+  const href = node.find('a').attr('href');
 
   if (/^..\/..\//.test(href)) {
     return href.replace(/^..\/..\//, origin.host);
@@ -131,11 +130,10 @@ axios.get(`https://cors-anywhere.herokuapp.com/${origin.url}`)
       data.resources[origin.id].push({
         title: getText($(elem), `${origin.children[0]}`),
         time: getText($(elem), `${origin.children[1]}`),
-        href: getAttr({
+        href: getHref({
           node: $(elem),
           origin: origin
-        }),
-        origin: `${origin.title}`
+        })
       })
     });
 
