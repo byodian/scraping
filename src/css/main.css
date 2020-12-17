@@ -1,0 +1,31 @@
+body {
+  line-height: 1.5;
+  width: 90%;
+  margin: 0 auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+ul {  
+  list-style: none;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:link {
+  color: #000;
+}
+
+a:hover {
+  color: #389;
+}
+
+a:visited {
+  color: #000;
+}
+
+li span {
+  color: #d2177d;
+}

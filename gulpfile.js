@@ -1,6 +1,7 @@
 const settings = {
   clean: true,
   scripts: true,
+  styles: true,
   copy: true,
   reload: true
 }
@@ -11,6 +12,10 @@ const paths = {
   scripts: {
     input: 'src/js/**/*.js',
     output: 'dist/js'
+  },
+  styles: {
+    input: 'src/css/**/*.css',
+    output: 'dist/css'
   },
   copy: {
     input: ['public/*'],
@@ -61,6 +66,13 @@ const buildScripts = function(cb) {
     .pipe(dest(paths.scripts.output))
 }
 
+const buildStyles = function (cb) {
+	if (!settings.styles) return cb();
+
+	return src(paths.styles.input)
+		.pipe(dest(paths.styles.output));
+};
+
 const copyFiles = function (cb) {
 	if (!settings.copy) return cb();
 
@@ -98,6 +110,7 @@ exports.default = series(
   clean,
   parallel(
     buildScripts,
+    buildStyles,
     copyFiles
   )
 );

@@ -111,7 +111,7 @@ const helper = {
   }
 }
 
-const scrapDate = function(count = 10) {
+const scrapDate = function(count = 6) {
   data.origins.forEach(origin => {
   axios.get(`https://cors-anywhere.herokuapp.com/${origin.url}`)
     .then(response => {
@@ -137,7 +137,6 @@ const scrapDate = function(count = 10) {
           origin: origin,
         })
 
-        console.log(data)
         lists.render();
       })
     .catch(error => {
