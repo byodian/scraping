@@ -137,7 +137,6 @@ const scrapDate = function(count = 10) {
           origin: origin,
         })
 
-        console.log(data)
         lists.render();
       })
     .catch(error => {
