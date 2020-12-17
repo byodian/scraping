@@ -1,6 +1,14 @@
 // Component
+
+
 const Component = (function() {
-  const Constructor = function(selector, options ) {
+
+/*
+* @constructor
+* @param {String} selector the element selector
+* @param {Object} options options for the state-based component
+*/
+  const Constructor = function(selector, options) {
     this.selector = selector;
     this.data = options.data;
     this.origin = options.origin;

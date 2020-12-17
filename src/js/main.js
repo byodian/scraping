@@ -71,97 +71,79 @@ const data = {
 }
 
 // Helper function
-const getText = function(node, elem) {
-  return node.children(elem).text();
-}
+const helper = {
+  getText: (node, elem) => helper.trim(node.find(elem).text()),
+  getDate: (node, elem) => node.find(elem).text(),
+  getHref: ({ node, origin }) => {
+    const href = node.find('a').attr('href');
+    if (/^..\/..\//.test(href)) {
+      return href.replace(/^..\/..\//, origin.host);
+    } 
 
-const getHref = function({
-  node, 
-  origin
-}) {
-  const href = node.find('a').attr('href');
+    if (/^\//.test(href)) {
+      return href.replace(/^\//, origin.host);
+    }
+    
+    if (/^.\//.test(href)) {
+      return href.replace(/.\//, origin.url);
+    } 
 
-  if (/^..\/..\//.test(href)) {
-    return href.replace(/^..\/..\//, origin.host);
-  } 
+    return href;
+  },
+  trim: (str, regx = /\d{4}-\d{2}-\d{2} \d{2}:\d{2}/) => str.replace(regx, ''),
+  createItem: resource => (`
+      <li>
+        <a href="${resource.href}">${resource.title}</a>
+        <span>${resource.time}</span>
+      </li>
+  `),
+  template: (data, origin) => {
+    if (data.resources[origin.id].length < 1) {
+      return '<p>Please wait ...</p>'
+    }
 
-  if (/^\//.test(href)) {
-    return href.replace(/^\//, origin.host);
+    return `
+      <h2>${origin.title}</h2>
+      <ul>
+        ${data.resources[origin.id].map(resource => helper.createItem(resource)).join('')}
+      </ul>
+    `
   }
-  
-  if (/^.\//.test(href)) {
-    return href.replace(/.\//, origin.url);
-  } 
-
-  return href;
 }
 
-const createItem = function(resource) {
-  return `
-    <li>
-      <a href="${resource.href}">${resource.title}</a>
-      <span>${resource.time}</span>
-    </li>`
-}
+const scrapDate = function(count = 10) {
+  data.origins.forEach(origin => {
+  axios.get(`https://cors-anywhere.herokuapp.com/${origin.url}`)
+    .then(response => {
+      const html = response.data;
+      const $ = cheerio.load(html);
 
-// template
-const template = function(data, origin) {
-  if (data.resources[origin.id].length < 1) {
-    return '<p>Please wait ...</p>'
-  }
+        $(`${origin.selector}`).each(function(i, elem) {
 
-  return `
-    <h2>${origin.title}</h2>
-    <ul>
-      ${data.resources[origin.id].map(resource => createItem(resource)).join('')}
-    </ul>
-  `
-}
+          if (i >= count) return;
+          data.resources[origin.id].push({
+            title: helper.getText($(elem), `${origin.children[0]}`),
+            time: helper.getDate($(elem), `${origin.children[1]}`),
+            href: helper.getHref({
+              node: $(elem),
+              origin: origin
+            })
+          })
+        });
 
-data.origins.forEach(origin => {
-
-// Async
-axios.get(`https://cors-anywhere.herokuapp.com/${origin.url}`)
-.then(response => {
-  const html = response.data;
-  const $ = cheerio.load(html);
-
-    $(`${origin.selector}`).each(function(i, elem) {
-      data.resources[origin.id].push({
-        title: getText($(elem), `${origin.children[0]}`),
-        time: getText($(elem), `${origin.children[1]}`),
-        href: getHref({
-          node: $(elem),
-          origin: origin
+        const lists = new Component(`${origin.parent}`, {
+          template: helper.template,
+          data: data,
+          origin: origin,
         })
+
+        console.log(data)
+        lists.render();
       })
-    });
-
-    const lists = new Component(`${origin.parent}`, {
-      template: template,
-      data: data,
-      origin: origin,
+    .catch(error => {
+      console.log(error);
     })
-
-    lists.render();
-
-    document.addEventListener('submit', function(event) {
-      event.preventDefault();
-      if (!event.target.matches('#count')) return;
-
-      
-      const input = document.querySelector('#input');
-      const value = Number(input.value);
-
-      console.log(value);
-
-      input.value = '';
-      input.focus();
-    }, false);
-
   })
-  .catch(error => {
-    console.log(error);
-  })
+}
 
-})
+scrapDate()
