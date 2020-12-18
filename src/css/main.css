@@ -1,31 +1,106 @@
-body {
-  line-height: 1.5;
-  width: 90%;
-  margin: 0 auto;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+html {
+  font-size: 10px;
 }
 
-ul {  
+body {
+  margin: 0;
+  font-size: 1.6rem;
+  font-family: Geneva, Verdana, sans-serif;
+  line-height: 1.5;
+  color: #333;
+  background: #3185E7;
+}
+
+#app {
+  width: 75%;
+  margin: 0 auto;
+}
+
+.logo {
+  position: relative;
+  top: 1rem;
+  z-index: -10;
+}
+
+#content{
+  position: relative;
+  background: #fff;
+  min-height: 100vh;
+  border-radius: 2px;
+  padding: 2.8rem 4.5rem;
+}
+
+h2,
+ul,
+h1,
+p {
+  margin-top: 0;
+  margin-bottom: 1.2rem;
+}
+
+section ul {  
+  margin-bottom: 3rem;
   list-style: none;
   padding: 0;
 }
 
+section:last-child ul {
+  margin-bottom: 0;
+}
+
 a {
+  display: block;;
+  width: 75%;
   text-decoration: none;
-}
-
-a:link {
-  color: #000;
-}
-
-a:hover {
-  color: #389;
+  color: #333;
 }
 
 a:visited {
-  color: #000;
+  color: #333;
+}
+
+a:hover {
+  color: #16278E;
+  text-decoration: underline;
+}
+
+li {
+  display: flex;
+  margin-bottom: 1.2rem;
+  justify-content: space-between;
 }
 
 li span {
-  color: #d2177d;
+  color: #F76363;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+@media screen and (max-width: 750px) {  
+  #app {
+    width: 95%;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  h2 {
+    font-size: 1.8rem;
+  }
+
+  #content {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+
+  a {
+    width: 100%;
+  }
+
+  li {
+    flex-direction: column;
+    font-size: 1.4rem;
+  }
 }

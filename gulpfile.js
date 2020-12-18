@@ -18,7 +18,7 @@ const paths = {
     output: 'dist/css'
   },
   copy: {
-    input: ['public/*'],
+    input: ['public/*', 'src/svg/banner.svg'],
     output: 'dist/'
   },
   reload: './dist'

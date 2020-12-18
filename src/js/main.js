@@ -73,7 +73,7 @@ const data = {
 // Helper function
 const helper = {
   getText: (node, elem) => helper.trim(node.find(elem).text()),
-  getDate: (node, elem) => node.find(elem).text(),
+  getDate: (node, elem) => helper.trim(node.find(elem).text(), / \d{2}:\d{2}$/),
   getHref: ({ node, origin }) => {
     const href = node.find('a').attr('href');
     if (/^..\/..\//.test(href)) {
